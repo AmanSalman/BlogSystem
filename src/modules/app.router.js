@@ -1,10 +1,11 @@
-import { connectDB } from '../../DB/Connection.js';
+import { connectDB, testDBConnection } from '../../DB/Connection.js';
 import authRouter from './auth/auth.router.js';
 import blogRouter from './blog/blog.router.js';
 import userRouter from './user/user.router.js';
 import cors from 'cors';
 
 export const initApp = (app,express)=>{
+    testDBConnection();
     connectDB();
     app.use(cors());
     app.use(express.json());
