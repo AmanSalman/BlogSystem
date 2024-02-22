@@ -21,6 +21,9 @@ export const initApp = (app,express)=>{
     };   
     
     app.use(cors(corsOptions));
+    app.use('/', (req,res)=>{
+        return res.json ({message:'welcome'})
+    })
     app.use('/auth', authRouter);
     app.use('/blog', blogRouter);
     app.use('/user', userRouter);
