@@ -6,8 +6,8 @@ export const GetAuth = (req,res)=>{
 
 export const register = async (req,res)=>{
     try {
-        const {email, password, name } = req.body;
-        const user = await UserModel.create({ email, password, name });  
+        const {email, password, name, age } = req.body;
+        const user = await UserModel.create({ email, password, name, age});  
         return res.json({message:'success',user});
         
     } catch (error) {
@@ -56,22 +56,12 @@ export const update = async (req, res) => {
         const { name } = req.body;
 
         // Assuming UserModel is your Sequelize model
-        const [updatedRowsCount, updatedUser] = await UserModel.update(
-            { name },
-            {
-                where: {
-                    id
-                }
-            }
-        );
-
-        if (updatedRowsCount === 0) {
+        const user= await UserModel.update({name}, {where:{id}});
+        if (!user) {
             return res.json({ message: "User not found" });
         }
-
-        console.log(updatedUser);
-        return res.json({ message: "Success", user: updatedUser });
+        return res.json({ message: "Success", user:name });
     } catch (error) {
-        return res.json({ message: "Error", error: error.message });
+        return res.json({ message: "Error", error: error.stack });
     }
 };
