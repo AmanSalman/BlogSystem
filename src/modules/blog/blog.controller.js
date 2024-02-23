@@ -14,8 +14,13 @@ export const GetBlog = async (req, res) =>{
 }
 
 export const addBlog = async (req,res)=>{
-    const {title,body,UserId} = req.body;
-    const blog = await BlogModel.create({title,body,UserId});
-    return res.json({message:"success",blog:blog});
+    try {
+        const {title,body,UserId} = req.body;
+        const blog = await BlogModel.create({title,body,UserId});
+        return res.json({message:"success",blog:blog});
+    } catch (error) {
+        return res.json({message:"error", error:error.stack})
+    }
 }
+
  
