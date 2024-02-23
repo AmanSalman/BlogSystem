@@ -7,8 +7,10 @@ import cors from 'cors';
 export const initApp = (app,express)=>{
     testDBConnection();
     connectDB();
-    app.use(cors());
+    
     app.use(express.json());
+    app.use(cors());
+    
     app.use('/auth', authRouter);
     app.use('/blog', blogRouter);
     app.use('/user', userRouter);

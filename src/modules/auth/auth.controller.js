@@ -50,21 +50,28 @@ export const destroy = async (req, res) => {
 
 }
 
-export const update = async (req,res)=>{
+export const update = async (req, res) => {
     try {
-        const {id} = req.params;
-        const {name} = req.body;
-        const user = await UserModel.update({name,
-        where:{
-            id
-        }});
+        const { id } = req.params;
+        const { name } = req.body;
 
-        if(!user){
-            return res.json({message:"user not found"});
+        // Assuming UserModel is your Sequelize model
+        const [updatedRowsCount, updatedUser] = await UserModel.update(
+            { name },
+            {
+                where: {
+                    id
+                }
+            }
+        );
+
+        if (updatedRowsCount === 0) {
+            return res.json({ message: "User not found" });
         }
 
-        return res.json({message:"success", user:user});
+        console.log(updatedUser);
+        return res.json({ message: "Success", user: updatedUser });
     } catch (error) {
-        return res.json({message:"error", error:error});
+        return res.json({ message: "Error", error: error.message });
     }
-}
+};
