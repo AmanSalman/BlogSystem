@@ -29,7 +29,8 @@ export const login = async (req,res) =>{
        if (!userCheck) {
         return res.json({ message: 'email or password are wrong' });
     } 
-    return res.json({ message: "success", user:userCheck});
+    console.log(userCheck)
+    return res.json({ message: "success", user:{email}});
     } catch (error) {
         return res.status(500).json({ message: error.message })
     }
@@ -46,7 +47,7 @@ export const destroy = async (req, res) => {
     if(!user){
         return res.json({message:"user not found"});
     } 
-    return res.json({message:"success", user});
+    return res.json({message:"success", user:user});
 
 }
 
