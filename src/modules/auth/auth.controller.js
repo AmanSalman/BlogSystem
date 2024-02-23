@@ -1,22 +1,45 @@
 import UserModel from "../../../DB/Model/user.model.js";
-
+import bcrypt from 'bcrypt';
 export const GetAuth = (req,res)=>{
     return res.json({message:'Auth success'});
 }
 
-export const register = async (req,res)=>{
-    try {
-        const {email, password, name, age } = req.body;
-        const user = await UserModel.create({ email, password, name, age});  
-        return res.json({message:'success',user});
+// export const register = async (req,res)=>{
+//     try {
+//         const {email, password, name, age } = req.body;
+//         const user = await UserModel.create({ email, password, name, age});  
+//         return res.json({message:'success',user});
         
+//     } catch (error) {
+//         if(error.original?.errno == 1062){
+//             return res.json({message:'email is already in use'});
+//         }
+//         return res.json({message:'error',error:error.stack});
+//     }
+// }
+
+
+
+
+export const register = async (req, res) => {
+    try {
+        const { email, password, name, age } = req.body;
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const user = await UserModel.create({ email, password: hashedPassword, name, age });
+
+        return res.json({ message: 'success', user });
     } catch (error) {
-        if(error.original?.errno == 1062){
-            return res.json({message:'email is already in use'});
+        if (error.original?.errno === 1062) {
+            return res.json({ message: 'email is already in use' });
         }
-        return res.json({message:'error',error:error.stack});
+
+        return res.json({ message: 'error', error: error.stack });
     }
-}
+};
+
 
 export const login = async (req,res) =>{
     try {
